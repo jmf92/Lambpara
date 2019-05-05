@@ -6,13 +6,13 @@ import pulsar
 # Function that emulates a sensor:
 # reading a CSV and
 # then send it line-by-line to Apache Pulsar
-def send_data(sensorPath, sensorName, pulsarIP, pulsarTopic):
+def send_data(sensorPath, sensorID, pulsarIP, pulsarTopic):
     # Pulsar producer configuration
     client = pulsar.Client('pulsar://'+pulsarIP+':6650')
     producer = client.create_producer(pulsarTopic)
 
     # Read sensor data from CSV file
-    with open(sensorPath+sensorName+'.csv') as csvfile:
+    with open(sensorPath+sensorID+'.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             # Get actual timestamp (Event time)
@@ -20,7 +20,7 @@ def send_data(sensorPath, sensorName, pulsarIP, pulsarTopic):
 
             # Create sensor data as CSV
             csvToSend = eventTime + ','\
-                        + sensorName + ','\
+                        + sensorID + ','\
                         + row['V'] + ','\
                         + row['I'] + ','\
                         + row['f'] + ','\
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     ################# Get arguments from command line #################################
     # Sensor:
     # -Sensor path
-    # -Sensor name
+    # -Sensor id
     # Pulsar:
     # -Pulsar IP
     # -Topic
@@ -59,10 +59,10 @@ if __name__ == '__main__':
                         dest="sensorPath",
                         help="path where is sensor data",
                         required=True)
-    parser.add_argument('--sensorName',
+    parser.add_argument('--sensorID',
                         action="store",
-                        dest="sensorName",
-                        help="sensor name, help to read data file",
+                        dest="sensorID",
+                        help="sensor id, help to read data file",
                         required=True)
 
     # Pulsar arguments
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     ################# Read sensor data from file and send it to Pulsar #################################
     send_data(sensorPath=args.get('sensorPath'),
-              sensorName=args.get('sensorName'),
+              sensorID=args.get('sensorID'),
               pulsarIP=args.get('pulsarIP'),
               pulsarTopic=args.get('pulsarTopic'))
 
