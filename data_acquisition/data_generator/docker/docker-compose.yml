@@ -1,0 +1,106 @@
+# compose for emulate all sensors
+version: '3'
+services:
+  # Base image for all sensors
+  docker-sensor:
+    image: docker-sensor
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+
+  # Basement
+  basement_plugs:
+    container_name: basement_plugs_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/basement/0.csv:${basementDataPath}0.csv
+    environment:
+      - sensorID=0
+      - sensorPath=${basementDataPath}
+
+
+  # Bathroom
+  bathroom_hotwater:
+    container_name: bathroom_hotwater_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/bathroom/1.csv:${bathroomDataPath}1.csv
+    environment:
+      - sensorID=1
+      - sensorPath=${bathroomDataPath}
+
+
+  # Dining room
+  dining_room_furnacefan:
+    container_name: dining_furnacefan_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/dining_room/2.csv:${diningDataPath}2.csv
+    environment:
+      - sensorID=2
+      - sensorPath=${diningDataPath}
+
+  dining_room_plugs:
+    container_name: dining_plugs_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/dining_room/3.csv:${diningDataPath}3.csv
+    environment:
+      - sensorID=3
+      - sensorPath=${diningDataPath}
+
+  dining_room_tv:
+    container_name: dining_tv_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/dining_room/4.csv:${diningDataPath}4.csv
+    environment:
+      - sensorID=4
+      - sensorPath=${diningDataPath}
+
+
+  # Kitchen
+  kitchen_dryer:
+    container_name: kitchen_dryer_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/kitchen/5.csv:${kitchenDataPath}5.csv
+    environment:
+      - sensorID=5
+      - sensorPath=${kitchenDataPath}
+
+  kitchen_washer:
+    container_name: kitchen_washer_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/kitchen/6.csv:${kitchenDataPath}6.csv
+    environment:
+      - sensorID=6
+      - sensorPath=${kitchenDataPath}
+
+  kitchen_dishwasher:
+    container_name: kitchen_dishwasher_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/kitchen/7.csv:${kitchenDataPath}7.csv
+    environment:
+      - sensorID=7
+      - sensorPath=${kitchenDataPath}
+
+  kitchen_fridge:
+    container_name: kitchen_fridge_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/kitchen/8.csv:${kitchenDataPath}8.csv
+    environment:
+      - sensorID=8
+      - sensorPath=${kitchenDataPath}
+
+  kitchen_oven:
+    container_name: kitchen_oven_sensor
+    image: docker-sensor
+    volumes:
+      - ../data_files/kitchen/9.csv:${kitchenDataPath}9.csv
+    environment:
+      - sensorID=9
+      - sensorPath=${kitchenDataPath}
