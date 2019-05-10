@@ -3,6 +3,7 @@ import csv
 import time
 import pulsar
 
+
 # Function that emulates a sensor:
 # reading a CSV and
 # then send it line-by-line to Apache Pulsar
@@ -49,8 +50,6 @@ if __name__ == '__main__':
     # Pulsar:
     # -Pulsar IP
     # -Topic
-    help_message ="Usage:\n python -sensor_path <sensor_path> "
-
     parser = argparse.ArgumentParser(description='Sensor emulator from CSV file.')
 
     # Sensor arguments
