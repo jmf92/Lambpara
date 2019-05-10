@@ -1,0 +1,19 @@
+FROM python:3.5.7-jessie
+
+# Environment variables
+ENV scriptPath /sensor/scripts/
+# Pulsar config (equals for all containers)
+ENV pulsarIP 192.168.1.139
+ENV pulsarTopic price
+
+
+RUN mkdir -p ${scriptPath} && \
+    pip install pulsar-client
+
+
+
+# Add python script to container
+COPY ./price.py ${scriptPath}
+
+CMD ["sh", "-c", "python ${scriptPath}/price.py \
+     --pulsarIP ${pulsarIP} --pulsarTopic ${pulsarTopic}"]

@@ -1,12 +1,19 @@
 # compose for emulate all sensors
 version: '3'
 services:
+  # Price generator container
+  price-generator:
+    image: price-generator
+    build:
+      context: ../
+      dockerfile: ./docker/priceGenerator_dockerfile
+
   # Base image for all sensors
   docker-sensor:
     image: docker-sensor
     build:
       context: ../
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/sensor_dockerfile
 
   # Basement
   basement_plugs:
