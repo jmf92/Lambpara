@@ -1,0 +1,10 @@
+name: data-normalization
+tenant: public
+namespace: default
+py: /home/jmf/Escritorio/TFM_KSchool/engine/pulsar/normalization/norm.py
+className: norm.Normalization
+#brokerServiceUrl:
+#  pulsar://192.168.1:6650
+inputs:
+  - persistent://public/default/raw
+output: persistent://public/default/norm
