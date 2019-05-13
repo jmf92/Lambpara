@@ -30,10 +30,10 @@ class Normalization(Function):
         # -voltage measure
         # -intesity measure
         if len(data) >= 4:
-            ts = data[0]
+            ts = int(data[0])
             s_id = int(data[1])
-            s_v = data[2]
-            s_i = data[3]
+            s_v = float(data[2])
+            s_i = float(data[3])
 
             # If all OK,
             # produce data enriched to output topic (norm) on JSON format
