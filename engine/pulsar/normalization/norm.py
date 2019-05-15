@@ -1,5 +1,5 @@
 from pulsar import Function
-
+import json
 
 class Normalization(Function):
     def __init__(self):
@@ -48,7 +48,7 @@ class Normalization(Function):
                              "lon": self.sensor_enrich.get(s_id).get("lon")
                              }
 
-                return str(data_norm).encode("utf-8")
+                return json.dumps(data_norm).encode("utf-8")
         else:
             # If input data parsing fails
             # produce warning message to log-topic (norm-log)
