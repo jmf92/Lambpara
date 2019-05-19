@@ -37,18 +37,18 @@ class Normalization(Function):
 
             # If all OK,
             # produce data enriched to output topic (norm) on JSON format
-            if ts and s_id and s_v and s_i:
-                data_norm = {"timestamp": ts,
-                             "sensor_id": s_id,
-                             "V": s_v,
-                             "I": s_i,
-                             "sensor_name": self.sensor_enrich.get(s_id).get("name"),
-                             "room": self.sensor_enrich.get(s_id).get("room"),
-                             "lat": self.sensor_enrich.get(s_id).get("lat"),
-                             "lon": self.sensor_enrich.get(s_id).get("lon")
-                             }
-
-                return json.dumps(data_norm).encode("utf-8")
+            context.get_logger().info("Data to norm: {}, {}, {}, {}".format(ts, s_id, s_i, s_v))
+            data_norm = {"timestamp": ts,
+                         "sensor_id": s_id,
+                         "V": s_v,
+                         "I": s_i,
+                         "sensor_name": self.sensor_enrich.get(s_id).get("name"),
+                         "room": self.sensor_enrich.get(s_id).get("room"),
+                         "lat": self.sensor_enrich.get(s_id).get("lat"),
+                         "lon": self.sensor_enrich.get(s_id).get("lon")
+                         }
+            context.get_logger().info("Data to send (normalized): {}".format(data_norm))
+            return json.dumps(data_norm).encode("utf-8")
         else:
             # If input data parsing fails
             # produce warning message to log-topic (norm-log)
