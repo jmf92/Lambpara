@@ -1,28 +1,8 @@
 package com.kschool.tfm.engine.flink;
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-
 import com.kschool.tfm.engine.flink.model.NormModel;
 import com.kschool.tfm.engine.flink.model.PowerModel;
-
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -43,7 +23,7 @@ import java.util.Objects;
  * Implements a streaming program that
  * calculates power consumption for each sensor (Energy and expenses).
  *
- * <p>Example usage:
+ * Example usage:
  *   --service-url pulsar://localhost:6650 --norm-topic norm --price-topic price --output-topic out --subscription sub_test
  */
 public class PowerConsumption {
@@ -54,7 +34,7 @@ public class PowerConsumption {
 
 		if (parameterTool.getNumberOfParameters() < 4) {
 			System.out.println("Missing parameters!");
-			System.out.println("Usage: pulsar --service-url <pulsar-service-url> --norm-topic <topic> --price-topic <topic> --output-topic <topic> --subscription <pulsar_subscription>");
+			System.out.println("Usage: PowerConsumption --pulsar-url <pulsar-service-url> --norm-topic <topic> --price-topic <topic> --output-topic <topic> --subscription <pulsar_subscription>");
 			return;
 		}
 
@@ -65,16 +45,16 @@ public class PowerConsumption {
 		env.getConfig().setGlobalJobParameters(parameterTool);
 		env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
 
-		String serviceUrl = parameterTool.getRequired("service-url");
+		String pulsarUrl = parameterTool.getRequired("pulsar-url");
 		String normTopic = parameterTool.getRequired("norm-topic");
 		String priceTopic = parameterTool.getRequired("price-topic");
-		String subscription = parameterTool.get("subscription", "flink-examples");
+		String subscription = parameterTool.get("subscription", "flink-pulsar");
 		String outputTopic = parameterTool.getRequired("output-topic");
 		int parallelism = parameterTool.getInt("parallelism", 1);
 
 
 		System.out.println("Parameters:");
-		System.out.println("\tServiceUrl:\t" + serviceUrl);
+		System.out.println("\tPulasrUrl:\t" + pulsarUrl);
 		System.out.println("\tNormTopic:\t" + normTopic);
 		System.out.println("\tPriceTopic:\t" + priceTopic);
 		System.out.println("\tSubscription:\t" + subscription);
@@ -83,7 +63,7 @@ public class PowerConsumption {
 
 		// Pulsar source for topic: price
 		PulsarSourceBuilder<String> priceBuilder = PulsarSourceBuilder.builder(new SimpleStringSchema())
-				.serviceUrl(serviceUrl)
+				.serviceUrl(pulsarUrl)
 				.topic(priceTopic)
 				.subscriptionName(subscription);
 		SourceFunction<String> srcPrice = priceBuilder.build();
@@ -91,7 +71,7 @@ public class PowerConsumption {
 
 		// Pulsar source for topic: norm
 		PulsarSourceBuilder<String> normBuilder = PulsarSourceBuilder.builder(new SimpleStringSchema())
-				.serviceUrl(serviceUrl)
+				.serviceUrl(pulsarUrl)
 				.topic(normTopic)
 				.subscriptionName(subscription);
 		SourceFunction<String> srcBuilder = normBuilder.build();
@@ -132,7 +112,7 @@ public class PowerConsumption {
 
 		if (null != outputTopic) {
 			power.addSink(new FlinkPulsarProducer<>(
-					serviceUrl,
+					pulsarUrl,
 					outputTopic,
 					powerModel -> {
 						try {
