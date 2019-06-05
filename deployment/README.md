@@ -1,5 +1,5 @@
 # Despliegue
-Tras seguir los pasos de esta guía tendremos todos los componentes (Pulsar, Flink, InfluxDB y Grafana), que componen la plataforma, desplegados en GKE.
+Tras seguir los pasos de esta guía tendremos todos los componentes (Pulsar, Flink, InfluxDB y Grafana), que integran la plataforma, desplegados en GKE.
 
 
 ## Prerrequisitos
@@ -24,6 +24,7 @@ Y a recordar que las versiones de los diferentes componentes a desplegar son:
 
 ## Instalación
 Una vez creado el proyecto en GCP y situados en el directorio donde se ha clonado el poyecto deberemos ejecutar los siguientes comandos:
+
 En mi caso el proyecto creado es **lambpara** (**RECORDATORIO**: este es el id del proyecto dentro de la consola de GCP)
 
 ```
@@ -93,6 +94,7 @@ Una vez aquí, nos conectaremos a la consola de GCP y eliminaremos el pool cread
 ¡Listo! Ya tenemos nuestro primer componente listo para recibir mensajes
 
 
+
 ### Flink
 
 Procedamos con nuestro siguiente componente, el motor de procesamiento.
@@ -108,8 +110,9 @@ kubectl apply -f jobmanager-deployment.yaml
 kubectl apply -f taskmanager-deployment.yaml
 ```
 
+
 ### InfluxDB y Grafana
-En este caso nos apoyaremos en un script que nos desplegará los componentes con la herramienta Helm y además nos creará la base de datos, **lambpara**, en InfluxDB, nos conectará el POD de grafana con nuestro local para poder conectarnos a la interfaz y nos proporcionará las credenciales para autenticarnos en ésta.
+En este caso nos apoyaremos en un script que nos desplegará los componentes con la herramienta Helm y además nos creará la base de datos, **lambpara**, en InfluxDB, nos conectará el POD de grafana con nuestro local (para poder conectarnos a la interfaz) y nos proporcionará las credenciales para autenticarnos en ésta.
 
 ```
 cd ${PROJECT}/deployment/gke/influx-grafana
